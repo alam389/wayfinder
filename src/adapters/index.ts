@@ -7,8 +7,9 @@
  */
 import { adapters, registerAdapter } from "../registry.js";
 import { expressAdapter } from "./ts/express.js";
+import { nestAdapter } from "./ts/nest.js";
 
-const BUILTIN = [expressAdapter];
+const BUILTIN = [expressAdapter, nestAdapter];
 
 export function registerBuiltinAdapters(): void {
   for (const adapter of BUILTIN) {
