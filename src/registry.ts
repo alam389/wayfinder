@@ -14,9 +14,12 @@ export interface LanguageAdapter {
   language: string;
   extensions: Set<string>;
   detectFrameworks(files: string[]): Promise<Set<string>>;
-  extractEndpoints(files: string[], root: string): Promise<Endpoint[]>;
+  extractEndpoints(files: string[], root: string, depth: number): Promise<Endpoint[]>;
   extractAgentGraphs?(files: string[], root: string): Promise<AgentGraph[]>;
 }
+
+/** Default bounded-trace depth when the CLI/env supplies none (SPEC: default 3). */
+export const DEFAULT_TRACE_DEPTH = 3;
 
 /** Directories never worth walking into. */
 export const IGNORE_DIRS = new Set([
@@ -70,8 +73,9 @@ export interface DispatchOptions {
  * that owns it, merge results, and return a Facts object. With no adapters
  * registered this returns an empty-but-valid Facts shape.
  */
-export async function dispatch(root: string, _options: DispatchOptions = {}): Promise<Facts> {
+export async function dispatch(root: string, options: DispatchOptions = {}): Promise<Facts> {
   const absRoot = path.resolve(root);
+  const depth = options.depth ?? DEFAULT_TRACE_DEPTH;
   const warnings: string[] = [];
 
   const allFiles = await walk(absRoot);
@@ -101,7 +105,7 @@ export async function dispatch(root: string, _options: DispatchOptions = {}): Pr
 
     languagesDetected.add(adapter.language);
     try {
-      endpoints.push(...(await adapter.extractEndpoints(claimed, absRoot)));
+      endpoints.push(...(await adapter.extractEndpoints(claimed, absRoot, depth)));
       if (adapter.extractAgentGraphs) {
         agentGraphs.push(...(await adapter.extractAgentGraphs(claimed, absRoot)));
       }

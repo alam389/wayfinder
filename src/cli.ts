@@ -6,6 +6,7 @@
  * Facts against the zod schema, and prints the JSON to stdout. Depth can also be
  * set via the TRACE_DEPTH env var (default 3); the explicit flag wins.
  */
+import { registerBuiltinAdapters } from "./adapters/index.js";
 import { dispatch } from "./registry.js";
 import { validateFacts } from "./schema.js";
 
@@ -86,6 +87,7 @@ async function main(): Promise<void> {
     process.exit(2);
   }
 
+  registerBuiltinAdapters();
   const facts = await dispatch(args.root, { depth: args.depth });
   const validated = validateFacts(facts);
   process.stdout.write(`${JSON.stringify(validated, null, 2)}\n`);
