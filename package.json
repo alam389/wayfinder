@@ -1,0 +1,34 @@
+{
+  "name": "codebase-endpoint-explainer",
+  "version": "0.1.0",
+  "description": "Explains a web/agent codebase one endpoint at a time across Python, JS/TS, and Java. Deterministic extractor emits facts JSON; the model narrates it.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "cee": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ts-morph": "^23.0.0",
+    "tree-sitter-wasms": "^0.1.11",
+    "web-tree-sitter": "^0.22.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}
