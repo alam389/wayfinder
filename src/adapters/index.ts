@@ -6,10 +6,11 @@
  * safe to call from both the CLI and individual test files.
  */
 import { adapters, registerAdapter } from "../registry.js";
+import { fastapiAdapter } from "./python/fastapi.js";
 import { expressAdapter } from "./ts/express.js";
 import { nestAdapter } from "./ts/nest.js";
 
-const BUILTIN = [expressAdapter, nestAdapter];
+const BUILTIN = [expressAdapter, nestAdapter, fastapiAdapter];
 
 export function registerBuiltinAdapters(): void {
   for (const adapter of BUILTIN) {
